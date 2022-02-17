@@ -1,4 +1,12 @@
-import React, { useState, useEffect } from 'react';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow strict-local
+ */
+
+import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -7,6 +15,7 @@ import {
   Text,
   useColorScheme,
   View,
+  FlatList
 } from 'react-native';
 
 import {
@@ -16,55 +25,107 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import messaging from '@react-native-firebase/messaging';
-
+import Cards from './components/Cards';
+import data from './data/HomeButtons';
+import AntDesign from 'react-native-vector-icons/Entypo';
+import {NavigationContainer} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Allapp from './components/ALLapp/Allapp'
+import AddTable from './components/main/AddTable'
+import MyExtension from  './components/main/MyExtension'
+import ReadyToPack from  './components/main/ReadyToPack'
+import Mytable from  './components/main/Mytable'
+import Login from './components/authscreen/Login';
+import { Provider } from 'react-redux';
+import { useSelector } from 'react-redux';
+import TableDetail from "./components/DetailsScreens/TableDetail"
+import {persistor, store} from './store';
+import C1Tables from './components/BRANCH/C1Tables';
+import C2Tables from './components/BRANCH/C2Tables';
+import {PersistGate} from 'redux-persist/integration/react';
+import Splashscreen from './components/authscreen/Splashscreen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import ReadytopackDetails from './components/DetailsScreens/ReadytopackDetails';
+// import { StripeProvider } from '@stripe/stripe-react-native';
+const Stack = createNativeStackNavigator();
+AntDesign.loadFont();
 const App = () => {
-  const [loading, setLoading] = useState(true);
-  // async function requestUserPermission() {
-  //   const authStatus = await messaging().requestPermission();
-  //   const enabled =
-  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
   
-  //   if (enabled) {
-  //     console.log('Authorization status:', authStatus);
-  //   }
-  // }
-  useEffect(() => {
-    // Assume a message-notification contains a "type" property in the data payload of the screen to open
-
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
-      navigation.navigate(remoteMessage.data.type);
-    });
-
-    // Check whether an initial notification is available
-    messaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage.notification,
-          );
-          setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
-        }
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return null;
-  }
   return (
-   <View>
-     <Text>
-       hello
-     </Text>
-   </View>
+    // <StripeProvider
+    //   publishableKey="pk_test_51KPz5MK8AnNnWsUxNAfsGbkFbjpzZ6GWketPumT11ksK3lTSxyrtyxTeNEUawwknfa12ibUR8Y4MWUOhskrkHTk100gQPmAgdd"
+    //  // urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+    //   //merchantIdentifier="merchant.com.{{YOUR_APP_NAME}}" // required for Apple Pay
+    // >
+    <Provider store={store}>
+
+       <PersistGate loading={null} persistor={persistor}>
+      {/* <GestureHandlerRootView> */}
+    <NavigationContainer>
+      <Stack.Navigator>
+      <Stack.Screen
+          name="splashscreen"
+          component={Splashscreen}
+          options={{headerShown: false}}
+        />
+      <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ALLapp"
+          component={Allapp}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AddTable"
+          component={AddTable}
+         // options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="MyExtension"
+          component={MyExtension}
+         // options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ReadyToPack"
+          component={ReadyToPack}
+         // options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Mytable"
+          component={Mytable}
+          //options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="TableDetail"
+          component={TableDetail}
+          //options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="C1Tables"
+          component={C1Tables}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="C2Tables"
+          component={C2Tables}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ReadytopackDetails"
+          component={ReadytopackDetails}
+          //options={{headerShown: false}}
+        />
+
+
+      </Stack.Navigator>
+    </NavigationContainer>
+      {/* </GestureHandlerRootView> */}
+    </PersistGate>
+    </Provider>
+    // </StripeProvider>
   );
 };
 
